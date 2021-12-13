@@ -1,5 +1,7 @@
 # Interact with Products contract
 
+You will need at least 2 addresses with their respective private keys
+
 ## Setup
 
 clone repo
