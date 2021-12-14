@@ -40,8 +40,10 @@ def get_product(product_id):
     return contract.functions.products(product_id).call()
 
 def get_all_products():
-    new_product_event_filter = contract.events.NewProduct.createFilter(fromBlock=first_block)
-    all_products = new_product_event_filter.get_all_entries()
+    products_count = contract.functions.size().call()
+    all_products = []
+    for i in range(products_count):
+        all_products.append(get_product(i))
     return all_products
 
 def get_product_by_name(name):
