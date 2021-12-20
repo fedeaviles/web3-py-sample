@@ -83,14 +83,26 @@ def test_create_product(mock_contract, mock_w3, account_1):
     # get the created product
     created_product = get_product(0)
 
-    # name
-    assert created_product[0] == "test_product"
-    # status
-    assert created_product[1] == 0
-    # owner
-    assert created_product[2] == account_1.address
-    # new owner
-    assert created_product[3] == "0x0000000000000000000000000000000000000000"
+    assert created_product["name"] == "test_product"
+    assert created_product["status"] == 0
+    assert created_product["owner"] == account_1.address
+    assert created_product["newOwner"] == "0x0000000000000000000000000000000000000000"
+
+
+def test_get_product(mock_contract, mock_w3, account_1):
+    create_product("test_product", account_1.address, account_1.key)
+
+    product = get_product(0)
+
+    assert product["name"] == "test_product"
+    assert product["status"] == 0
+    assert product["owner"] == account_1.address
+    assert product["newOwner"] == "0x0000000000000000000000000000000000000000"
+
+
+def test_get_product_raise_exception(mock_contract, mock_w3):
+    with pytest.raises(InvalidProductId):
+        get_product(0)
 
 
 def test_account_cannot_create_more_than_eleven_products(
@@ -105,37 +117,39 @@ def test_account_cannot_create_more_than_eleven_products(
 
 def test_delegate_product(mock_contract, mock_w3, account_1, account_2):
     create_product("test_product", account_1.address, account_1.key)
-    delegate_product(0, account_1.address, account_1.key, account_2.address)
-
     # get the created product
     created_product = get_product(0)
+    assert created_product["status"] == 0
+    assert created_product["owner"] == account_1.address
+    assert created_product["newOwner"] == "0x0000000000000000000000000000000000000000"
 
-    # name
-    assert created_product[0] == "test_product"
-    # status
-    assert created_product[1] == 1
-    # owner
-    assert created_product[2] == account_1.address
-    # new owner
-    assert created_product[3] == account_2.address
+    delegate_product(0, account_1.address, account_1.key, account_2.address)
+
+    # get the delegated product
+    delegated_product = get_product(0)
+    assert delegated_product["status"] == 1
+    assert delegated_product["owner"] == account_1.address
+    assert delegated_product["newOwner"] == account_2.address
 
 
 def test_accept_product(mock_contract, mock_w3, account_1, account_2):
     create_product("test_product", account_1.address, account_1.key)
+
     delegate_product(0, account_1.address, account_1.key, account_2.address)
+    # get the delegated product
+    delegated_product = get_product(0)
+    assert delegated_product["status"] == 1
+    assert delegated_product["owner"] == account_1.address
+    assert delegated_product["newOwner"] == account_2.address
+
     accept_product(0, account_2.address, account_2.key)
 
-    # get the created product
-    created_product = get_product(0)
+    # get the accepted product
+    accepted_product = get_product(0)
 
-    # name
-    assert created_product[0] == "test_product"
-    # status
-    assert created_product[1] == 0
-    # owner
-    assert created_product[2] == account_2.address
-    # new owner
-    assert created_product[3] == "0x0000000000000000000000000000000000000000"
+    assert accepted_product["status"] == 0
+    assert accepted_product["owner"] == account_2.address
+    assert accepted_product["newOwner"] == "0x0000000000000000000000000000000000000000"
 
 
 def test_get_all_products(mock_contract, mock_w3, account_1):
@@ -145,9 +159,9 @@ def test_get_all_products(mock_contract, mock_w3, account_1):
     products = get_all_products()
 
     for i in range(0, len(products)):
-        assert products[i][0] == "test_product" + str(i)
-        assert products[i][1] == 0
-        assert products[i][2] == account_1.address
-        assert products[i][3] == "0x0000000000000000000000000000000000000000"
+        assert products[i]["name"] == "test_product" + str(i)
+        assert products[i]["status"] == 0
+        assert products[i]["owner"] == account_1.address
+        assert products[i]["newOwner"] == "0x0000000000000000000000000000000000000000"
 
     assert len(products) == 2
