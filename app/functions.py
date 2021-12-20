@@ -1,5 +1,5 @@
-from settings import w3, contract, first_block
-from exceptions import InvalidProductId
+from app.settings import w3, contract, first_block
+from app.exceptions import InvalidProductId
 
 
 def send_transaction(transaction, address, private_key):

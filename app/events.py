@@ -1,5 +1,5 @@
 import asyncio
-from settings import contract
+from app.settings import contract
 
 suscriptors = []
 

@@ -1,6 +1,6 @@
-import pytest, json
-from settings import abi
-from functions import *
+import pytest
+from app.settings import abi
+from app.functions import *
 
 from web3 import Web3, EthereumTesterProvider
 
@@ -22,7 +22,7 @@ def w3(tester_provider):
 
 @pytest.fixture
 def mock_w3(monkeypatch, w3):
-    monkeypatch.setattr("functions.w3", w3)
+    monkeypatch.setattr("app.functions.w3", w3)
 
 
 @pytest.fixture
@@ -46,7 +46,7 @@ def product_contract(eth_tester, w3):
 
 @pytest.fixture
 def mock_contract(monkeypatch, product_contract):
-    monkeypatch.setattr("functions.contract", product_contract)
+    monkeypatch.setattr("app.functions.contract", product_contract)
 
 
 @pytest.fixture
