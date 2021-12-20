@@ -15,7 +15,7 @@ pipenv install
 
 ```
 pipenv run ipython
-from functions import *
+from app.functions import *
 ```
 
 then run the function you want to
@@ -26,7 +26,7 @@ use another console to listen the events
 
 ```
 pipenv run ipython
-from events import *
+from app.events import *
 ```
 
 to listen the events for new products
@@ -46,4 +46,10 @@ or to listen the events for delegated products, you need to subscribe to
 ```
 suscribe('newOwnerAddress')
 listen_delegated_products()
+```
+
+## Tests
+
+```
+pipenv run pytest app
 ```
