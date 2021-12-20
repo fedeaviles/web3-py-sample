@@ -9,6 +9,8 @@ ipython = "*"
 python-dotenv = "*"
 pytest = "*"
 ipdb = "*"
+fastapi = "*"
+uvicorn = {extras = ["standar"], version = "*"}
 
 [dev-packages]
 black = "*"
