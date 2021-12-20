@@ -1,4 +1,5 @@
 from settings import w3, contract, first_block
+from exceptions import InvalidProductId
 
 
 def send_transaction(transaction, address, private_key):
@@ -30,7 +31,18 @@ def accept_product(product_id, address, private_key):
 
 
 def get_product(product_id):
-    return contract.functions.products(product_id).call()
+    products_count = contract.functions.size().call()
+    if product_id < products_count:
+        product = contract.functions.products(product_id).call()
+        return {
+            "id": product_id,
+            "name": product[0],
+            "status": product[1],
+            "owner": product[2],
+            "newOwner": product[3],
+        }
+    else:
+        raise InvalidProductId("Product id is invalid")
 
 
 def get_all_products():
