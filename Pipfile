@@ -7,8 +7,14 @@ name = "pypi"
 web3 = {extras = ["tester"], version = "*"}
 ipython = "*"
 python-dotenv = "*"
+pytest = "*"
+ipdb = "*"
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
