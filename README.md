@@ -11,6 +11,17 @@ pipenv shell
 pipenv install
 ```
 
+## API
+
+### Start server
+
+```
+pipenv shell
+uvicorn main:app
+```
+
+View and interact with the endpoints at http://127.0.0.1:8000/docs
+
 ## Functions
 
 ```
@@ -51,5 +62,5 @@ listen_delegated_products()
 ## Tests
 
 ```
-pipenv run pytest app
+pipenv run pytest
 ```
