@@ -11,6 +11,7 @@ pytest = "*"
 ipdb = "*"
 fastapi = "*"
 uvicorn = {extras = ["standar"], version = "*"}
+coverage = "*"
 
 [dev-packages]
 black = "*"
