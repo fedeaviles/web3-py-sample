@@ -34,8 +34,6 @@ async def read_product(id: NonNegativeInt):
         return functions.get_product(id)
     except (InvalidProductId):
         raise HTTPException(status_code=404, detail="Product not found")
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
 
 
 @app.post("/products")
