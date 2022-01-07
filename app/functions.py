@@ -53,25 +53,22 @@ def get_all_products():
     return all_products
 
 
-def get_product_by_name(name):
-    new_product_event_filter = contract.events.NewProduct.createFilter(
-        fromBlock=first_block, argument_filters={"name": name}
-    )
-    all_products = new_product_event_filter.get_all_entries()
-    return all_products
+def get_filtered_products(**kwargs):
+    valid_filters = ["name", "status", "owner", "newOwner"]
+    all_products = get_all_products()
+    products = []
+    for product in all_products:
+        if all(
+            key in valid_filters and product[key] == value
+            for key, value in kwargs.items()
+        ):
+            products.append(product)
+    return products
 
 
 def get_delegated_products():
     delegated_product_event_filter = contract.events.DelegateProduct.createFilter(
         fromBlock=first_block
-    )
-    all_products = delegated_product_event_filter.get_all_entries()
-    return all_products
-
-
-def get_delegated_products_by_owner(new_owner):
-    delegated_product_event_filter = contract.events.DelegateProduct.createFilter(
-        fromBlock=first_block, argument_filters={"newOwner": new_owner}
     )
     all_products = delegated_product_event_filter.get_all_entries()
     return all_products
