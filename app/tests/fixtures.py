@@ -79,3 +79,8 @@ def account_2(w3):
         }
     )
     return account
+
+
+@pytest.fixture
+def mock_minimum_confirmations(monkeypatch, request):
+    monkeypatch.setattr("app.events.minimum_confirmations", request.param)
