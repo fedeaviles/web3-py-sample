@@ -14,8 +14,6 @@ jobs:
     container: python:3.9-slim-buster
     timeout-minutes: 5
     env:
-      FLASK_ENV: development
-      FLASK_DEBUG: 1
       OS: ${{ matrix.os }}
       PYTHON: "3.9"
     steps:
@@ -54,7 +52,6 @@ jobs:
           files: ./coverage.xml
           flags: unittest,integration
           name: codecov-umbrella
-          path_to_write_report: ./codecov_report.txt
           verbose: true
           working-directory: ./
           root_dir: ./
