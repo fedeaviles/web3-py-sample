@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/fedeaviles/web3-py-sample/branch/main/graph/badge.svg?token=AW59LH04G5)](https://codecov.io/gh/fedeaviles/web3-py-sample)
+
 # Interact with Products contract
 
 You will need at least 2 addresses with their respective private keys
