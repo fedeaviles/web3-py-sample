@@ -1,24 +1,60 @@
 name: Coverage
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+
 jobs:
-  run:
+  test:
     runs-on: ubuntu-latest
+    container: python:3.9-slim-buster
+    timeout-minutes: 5
     env:
-      OS: ubuntu-latest
+      FLASK_ENV: development
+      FLASK_DEBUG: 1
+      OS: ${{ matrix.os }}
       PYTHON: "3.9"
     steps:
-      - uses: checkout@v2
+      - name: update dependencies
+        run: apt-get update && apt-get -yq install build-essential libssl-dev swig
+      - uses: actions/checkout@v2
+      - name: Cache pip and pipenv
+        uses: actions/cache@v2
         with:
-          fetch-depth: "2"
-
-      - name: Setup Python
-        uses: actions/setup-python@master
-        with:
-          python-version: 3.7
-      - name: Generate Report
+          path: |
+            ~/cache
+            ~/.cache/pip3
+            ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip3-
+            ${{ runner.os }}-pipenv-
+      # Install pipenv
+      - name: Install pip3
+        run: pip3 install pipenv
+      # Create and activate environment
+      - name: Create environment
+        run: pipenv install --dev
+      # run tests
+      - name: Run tests
         run: |
-          pip install coverage
-          coverage run -m pytest
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v1
+          pipenv run coverage run -m pytest
+          pipenv run coverage report
+          pipenv run coverage xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
         with:
+          directory: ./
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          files: ./coverage.xml
+          flags: unittest,integration
+          name: codecov-umbrella
+          path_to_write_report: ./codecov_report.txt
+          verbose: true
+          working-directory: ./
+          root_dir: ./
