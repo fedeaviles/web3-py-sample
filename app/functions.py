@@ -1,8 +1,10 @@
-from app.settings import w3, contract, first_block
+import requests, json
+
+from app.settings import w3, contract, sign_url
 from app.exceptions import InvalidProductId
 
 
-def send_transaction(transaction, address, private_key):
+def send_transaction(transaction, address):
     tx = transaction.buildTransaction(
         {
             "from": address,
@@ -11,23 +13,29 @@ def send_transaction(transaction, address, private_key):
             "gasPrice": w3.toWei("40", "gwei"),
         }
     )
-    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    return w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    # sign trough service
+    signed_tx = requests.request(
+        "POST",
+        sign_url,
+        headers={"content-type": "application/json"},
+        json=json.dumps(tx),
+    ).json()
+    return w3.eth.send_raw_transaction(signed_tx["rawTransaction"])
 
 
-def create_product(name, address, private_key):
+def create_product(name, address):
     transaction = contract.functions.createProduct(name)
-    return send_transaction(transaction, address, private_key)
+    return send_transaction(transaction, address)
 
 
-def delegate_product(product_id, from_address, from_private_key, to_address):
+def delegate_product(product_id, from_address, to_address):
     transaction = contract.functions.delegateProduct(product_id, to_address)
-    return send_transaction(transaction, from_address, from_private_key)
+    return send_transaction(transaction, from_address)
 
 
-def accept_product(product_id, address, private_key):
+def accept_product(product_id, address):
     transaction = contract.functions.acceptProduct(product_id)
-    return send_transaction(transaction, address, private_key)
+    return send_transaction(transaction, address)
 
 
 def get_product(product_id):
@@ -64,19 +72,3 @@ def get_filtered_products(**kwargs):
         ):
             products.append(product)
     return products
-
-
-def get_delegated_products():
-    delegated_product_event_filter = contract.events.DelegateProduct.createFilter(
-        fromBlock=first_block
-    )
-    all_products = delegated_product_event_filter.get_all_entries()
-    return all_products
-
-
-def get_accepted_products():
-    accepted_product_event_filter = contract.events.AcceptProduct.createFilter(
-        fromBlock=first_block
-    )
-    all_products = accepted_product_event_filter.get_all_entries()
-    return all_products

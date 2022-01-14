@@ -18,6 +18,6 @@ abi = json.loads(
 contract_address = w3.toChecksumAddress("0xd9E0b2C0724F3a01AaECe3C44F8023371f845196")
 contract = w3.eth.contract(address=contract_address, abi=abi)
 
-first_block = 22366976
+sign_url = os.getenv("SIGN_URL")
 
 minimum_confirmations = int(os.getenv("MINIMUM_CONFIRMATIONS", "10"))

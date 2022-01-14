@@ -9,18 +9,15 @@ app = FastAPI()
 class ProductCreate(BaseModel):
     name: str
     address: str
-    key: str
 
 
 class ProductDelegate(BaseModel):
     address: str
-    key: str
     new_address: str
 
 
 class ProductAccept(BaseModel):
     address: str
-    key: str
 
 
 @app.get("/products")
@@ -39,7 +36,7 @@ async def read_product(id: NonNegativeInt):
 @app.post("/products")
 async def create_product(product: ProductCreate):
     try:
-        tx = functions.create_product(product.name, product.address, product.key)
+        tx = functions.create_product(product.name, product.address)
         return {"transaction_hash": tx.hex()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -48,9 +45,7 @@ async def create_product(product: ProductCreate):
 @app.post("/products/{id}/delegate")
 async def delegate_product(id: int, product: ProductDelegate):
     try:
-        tx = functions.delegate_product(
-            id, product.address, product.key, product.new_address
-        )
+        tx = functions.delegate_product(id, product.address, product.new_address)
         return {"transaction_hash": tx.hex()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -59,7 +54,7 @@ async def delegate_product(id: int, product: ProductDelegate):
 @app.post("/products/{id}/accept")
 async def accept_product(id: int, product: ProductAccept):
     try:
-        tx = functions.accept_product(id, product.address, product.key)
+        tx = functions.accept_product(id, product.address)
         return {"transaction_hash": tx.hex()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
