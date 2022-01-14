@@ -2,7 +2,11 @@
 
 # Interact with Products contract
 
-You will need at least 2 addresses with their respective private keys
+Copy the `.env.example` and complete it with your secrets.
+
+```bash
+cp .env.example .env
+```
 
 ## Setup
 
@@ -11,6 +15,15 @@ clone repo
 ```
 pipenv shell
 pipenv install
+```
+
+## Sign Service
+
+### Start server
+
+```
+pipenv shell
+uvicorn service:app --port=8001
 ```
 
 ## API
@@ -23,15 +36,6 @@ uvicorn main:app
 ```
 
 View and interact with the endpoints at http://127.0.0.1:8000/docs
-
-## Sign Service
-
-### Start server
-
-```
-pipenv shell
-uvicorn service:app --port=8001
-```
 
 ## Functions
 
