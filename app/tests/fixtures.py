@@ -84,3 +84,8 @@ def account_2(w3):
 @pytest.fixture
 def mock_minimum_confirmations(monkeypatch, request):
     monkeypatch.setattr("app.events.minimum_confirmations", request.param)
+
+
+@pytest.fixture
+def mock_env_key(monkeypatch):
+    monkeypatch.setenv("KEY", "fake-key", prepend=False)

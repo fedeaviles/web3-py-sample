@@ -22,6 +22,15 @@ uvicorn main:app
 
 View and interact with the endpoints at http://127.0.0.1:8000/docs
 
+## Sign Service
+
+### Start server
+
+```
+pipenv shell
+uvicorn service:app --port=8001
+```
+
 ## Functions
 
 ```
