@@ -30,21 +30,18 @@ def test_event_action(mock_print):
 
 
 @patch("app.events.listen_event")
-def test_listen_new_products(mock_listen_event, mock_contract):
-    # TODO improve this test
+def test_listen_new_products(mock_listen_event, mock_contract_events):
     listen_new_products()
     mock_listen_event.assert_called()
 
 
 @patch("app.events.listen_event")
-def test_listen_delegated_products(mock_listen_event, mock_contract):
-    # TODO improve this test
+def test_listen_delegated_products(mock_listen_event, mock_contract_events):
     listen_delegated_products()
     mock_listen_event.assert_called()
 
 
 @patch("app.events.listen_event")
-def test_listen_accepted_products(mock_listen_event, mock_contract):
-    # TODO improve this test
+def test_listen_accepted_products(mock_listen_event, mock_contract_events):
     listen_accepted_products()
     mock_listen_event.assert_called()
