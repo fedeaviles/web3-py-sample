@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  api:
+    build: .
+    image: web-sample:latest
+    container_name: api
+    command: bash -c "uvicorn main:app --port 8000 --reload"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    tty: true
+    stdin_open: true
+    restart: on-failure
+    depends_on:
+      - service
+
+  service:
+    build: .
+    image: web-sample:latest
+    container_name: service
+    command: bash -c "uvicorn service:app --port 8001 --reload"
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    tty: true
+    stdin_open: true
+    restart: on-failure

@@ -2,45 +2,53 @@
 
 # Interact with Products contract
 
+## Docker and Docker Compose installation
+
+Install Docker:
+
+- `https://docs.docker.com/install/`
+
+After install Docker, proceed to install Docker Compose:
+
+- `https://docs.docker.com/compose/install/`
+
+## Setup
+
 Copy the `.env.example` and complete it with your secrets.
 
 ```bash
 cp .env.example .env
 ```
 
-## Setup
+### Build image
 
-clone repo
-
-```
-pipenv shell
-pipenv install
+```bash
+docker-compose -f docker-compose.yml build
 ```
 
-## Sign Service
+### Run
 
-### Start server
-
+```bash
+docker-compose -f docker-compose.yml up -d
 ```
-pipenv shell
-uvicorn service:app --port=8001
+
+### Stop
+
+```bash
+docker-compose -f docker-compose.yml down
 ```
 
 ## API
 
-### Start server
+View and interact with the endpoints at
 
-```
-pipenv shell
-uvicorn main:app
-```
-
-View and interact with the endpoints at http://127.0.0.1:8000/docs
+- Main Api: http://localhost:8000/docs
+- Sign Service: http://localhost:8001/docs
 
 ## Functions
 
 ```
-pipenv run ipython
+docker-compose exec api ipython
 from app.functions import *
 ```
 
@@ -51,7 +59,7 @@ then run the function you want to
 use another console to listen the events
 
 ```
-pipenv run ipython
+docker-compose exec api ipython
 from app.events import *
 ```
 
@@ -77,5 +85,5 @@ listen_delegated_products()
 ## Tests
 
 ```
-pipenv run pytest
+docker-compose exec api pytest
 ```
